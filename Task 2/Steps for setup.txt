@@ -1,0 +1,71 @@
+- created two ec2 instance runing ubuntu:
+- created a key so i can do adminstrative tasks from master node 
+
+---> then install container engine
+
+$ tee /etc/modules-load.d/containerd.conf <<EOF
+> overlay
+> br_netfilter
+> EOF
+
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+$ apt install -y containerd.io
+$ mkdir -p /etc/containerd
+$ containerd config default>/etc/containerd/config.toml
+
+$ systemctl restart containerd
+$ systemctl enable containerd
+
+---------------------------------------------------------------------------------
+
+--- confugire cgroup and ip taples networking
+https://kubernetes.io/docs/setup/production-environment/container-runtimes/
+
+--- open needed ports in master & worker
+https://kubernetes.io/docs/reference/networking/ports-and-protocols/
+
+--- disable Swap 
+$ sudo swapoff -a  
+
+--- install transport-https
+$ sudo apt-get install -y apt-transport-https ca-certificates curl
+
+--- Download the Google Cloud public signing key
+$ sudo curl -fsSLo /etc/apt/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+--- Add the Kubernetes apt repository
+$ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+--- install kubelet kubeadm kubectl
+$ sudo apt-get install -y kubelet kubeadm kubectl
+
+--- hold the installed packages at their installed versions:
+$ apt-mark hold kubelet kubeadm kubectl
+$ systemctl daemon-reload
+$ systemctl restart kubelet.service
+
+--------------------------------------------------------------------------------
+
+### for master node
+
+$ kubeadm init
+$ mkdir -p $HOME/.kube
+$ sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+$ sudo chown $(id -u):$(id -g) $HOME/.kube/config
+$ export KUBECONFIG=/etc/kubernetes/admin.conf
+
+--- install network pod
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+### for worker node 
+Then you can join any number of worker nodes by running the following on each as root:
+
+$ kubeadm join 10.0.10.140:6443 --token d6nrqv.f3cnazkqyax1xeks \
+        --discovery-token-ca-cert-hash sha256:9efb0a226bdd7aa8526d487717bb6ab67a35a888cf2ac942fdde3a53c56e5c0c
+
+--------------------------------------------------------------------------------
+
+
+

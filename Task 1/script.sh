@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cat source.text | while read line 
+cat source.txt | while read line 
 do
   # separate line with white space
   arr=(${line// / })
