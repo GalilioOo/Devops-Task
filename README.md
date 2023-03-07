@@ -7,18 +7,13 @@ The 131 of jane@domain.com is ODD
 # Task_2 Result
 # Instructions
 ## 1- Create namespace on kuberenetes cluster
-```kubectl create namespace test```
+```$ kubectl create namespace test```
+## 2- Create pod with image ```image=bkimminich/juice-shop```
 
-## 2- Create Deployment
-```kubectl create deployment juice-shop --namespace test --image=bkimminich/juice-shop```
+## 3- Expose pods to port 8080 inside the cluster using ```juice-shop-service```
 
-where deployment name is juice-shop, namespace name is test and the image name is bkimminich/juice-shop
+## 4- Expose pods outside cluster using ingress 
+```kubectl apply -f task.yaml --namespace test```
+This will create an ingress service that connects the juice-shop service to the domain "juice-shop.com" 
 
-## 3- Expose pods to port 3000 inside the cluster
-```kubectl expose deployment juice-shop --port=3000 --target-port=3000 --type=ClusterIP```
-
-This will create a service of type cluster ip which exposes the pods on port 3000
-
-## 4- Expose pods outside cluster using ingress
-```kubectl apply -f ingress.yaml --namespace test```
-This will create an ingress service that connects the juice-shop cluster ip service to the domain "example.com" 
+![alt text](./img.png)

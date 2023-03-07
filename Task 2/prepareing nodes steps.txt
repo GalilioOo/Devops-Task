@@ -1,8 +1,6 @@
 - created two ec2 instance runing ubuntu:
 - created a key so i can do adminstrative tasks from master node 
-
 ---> then install container engine
-
 $ tee /etc/modules-load.d/containerd.conf <<EOF
 > overlay
 > br_netfilter
@@ -17,15 +15,12 @@ $ containerd config default>/etc/containerd/config.toml
 
 $ systemctl restart containerd
 $ systemctl enable containerd
-
 ---------------------------------------------------------------------------------
-
 --- confugire cgroup and ip taples networking
 https://kubernetes.io/docs/setup/production-environment/container-runtimes/
 
 --- open needed ports in master & worker
 https://kubernetes.io/docs/reference/networking/ports-and-protocols/
-
 --- disable Swap 
 $ sudo swapoff -a  
 
@@ -47,7 +42,6 @@ $ systemctl daemon-reload
 $ systemctl restart kubelet.service
 
 --------------------------------------------------------------------------------
-
 ### for master node
 
 $ kubeadm init
@@ -64,8 +58,4 @@ Then you can join any number of worker nodes by running the following on each as
 
 $ kubeadm join 10.0.10.140:6443 --token d6nrqv.f3cnazkqyax1xeks \
         --discovery-token-ca-cert-hash sha256:9efb0a226bdd7aa8526d487717bb6ab67a35a888cf2ac942fdde3a53c56e5c0c
-
 --------------------------------------------------------------------------------
-
-
-
