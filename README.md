@@ -2,6 +2,7 @@
 
 # Task_1 Result
 The 325 of john@domain.com is ODD
+
 The 131 of jane@domain.com is ODD
 
 # Task_2 Result
