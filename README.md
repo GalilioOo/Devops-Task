@@ -17,4 +17,7 @@ The 131 of jane@domain.com is ODD
 This will create an ingress service that connects the juice-shop service to the domain "juice-shop.com" 
 
 ![alt text](./img.png)
+
+# curl on site url 
+
 ![alt text](./web.png)
